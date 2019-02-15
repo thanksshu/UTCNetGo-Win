@@ -18,12 +18,7 @@ goto fermer
 cd /d "%~dp0"
 cacls.exe "%SystemDrive%\System Volume Information" >nul 2>nul
 if %errorlevel%==0 goto Admin
-if exist "%temp%\getadmin.vbs" del /f /q "%temp%\getadmin.vbs"
-echo Set RequestUAC = CreateObject^("Shell.Application"^)>"%temp%\getadmin.vbs"
-echo RequestUAC.ShellExecute "%~s0","/k","","runas",1 >>"%temp%\getadmin.vbs"
-echo WScript.Quit >>"%temp%\getadmin.vbs"
-"%temp%\getadmin.vbs" /f
-if exist "%temp%\getadmin.vbs" del /f /q "%temp%\getadmin.vbs"
+"admin.get.vbs" /f
 exit
 
 :Admin
@@ -42,6 +37,8 @@ echo ===========================================================================
 echo                                  选择网关
 echo ===========================================================================
 echo]
+
+cd /d "%~dp0"
 
 set /P gateway=<gateway
 echo 设定网关：%gateway%
@@ -78,7 +75,9 @@ echo "......0%%"
 start /min tun2socks.start.vbs
 echo "......20%%"
 
-choice /t 3 /d y /n >nul 
+choice /t 2 /d y /n >nul
+echo "......30%%"
+choice /t 2 /d y /n >nul
 
 route add 0.0.0.0 mask 0.0.0.0 10.0.0.1 metric 6
 echo "......40%%"
