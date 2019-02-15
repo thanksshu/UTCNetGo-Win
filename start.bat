@@ -1,0 +1,1 @@
+cmd /c core\main.start.bat
