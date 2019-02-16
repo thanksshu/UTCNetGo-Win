@@ -1,9 +1,27 @@
-@echo off
+echo off
+color 87
+mode con cols=75 lines=1
+chcp 936
+setlocal enabledelayedexpansion 
+cd /d "%~dp0"
+
+rem 读取配置 开始
+for /f "delims= eol=[" %%a in (..\config.ini) do (
+    for /f "delims=; tokens=1" %%b in ("%%a") do (
+        for /f "delims== tokens=1,2" %%c in ("%%b") do (
+            set key=%%c        
+            set value=%%d
+            set key=!key: =!
+            set value=!value: =!
+            set !key!=!value!
+        )
+    ) 
+)
+rem 读取配置 结束
 
 rem 设置界面 开始
-color 70
-mode con cols=75 lines=40
-title Tun2V2ray
+mode con lines=%height%
+title UTCNet-Go-Win
 rem 设置界面 结束
 
 rem 请求管理员权限 开始
@@ -11,65 +29,48 @@ ver|findstr "[6,10]\.[0-9]\.[0-9][0-9]*" > nul && (goto Main)
 ver|findstr "[3-5]\.[0-9]\.[0-9][0-9]*" > nul && (goto isBelowNT6)
 
 :isBelowNT6
-echo 在低级Windows下运行需要手动获取管理员权限！
+echo 需要管理员权限/Need Admin permission
 goto fermer
 
 :Main
-cd /d "%~dp0"
 cacls.exe "%SystemDrive%\System Volume Information" >nul 2>nul
 if %errorlevel%==0 goto Admin
 "admin.get.vbs" /f
+endlocal
 exit
 
 :Admin
 rem 请求管理员权限 结束
 
-rem 选择变量 开始
-echo]
-echo ************************注意！运行环境应为 ！中文 ！***********************
-echo]
-
-
-
-
+rem 初始化 开始
 echo]
 echo ===========================================================================
-echo                                  选择网关
+echo                             初始化/initializing
 echo ===========================================================================
 echo]
-
-cd /d "%~dp0"
-
-set /P gateway=<gateway
-echo 设定网关：%gateway%
-choice /C YNF /M "是否使用此网关？（F关闭）"
-if errorlevel 3 goto fermer
-if errorlevel 2 goto gwchoisir
-if errorlevel 1 goto main
-:gwchoisir
-echo]
-echo 网关列表：
-for /f "tokens=15" %%i in ('ipconfig /all ^| find /i "默认网关"') do echo %%i
-echo]
-set /p gateway=输入网关：
-echo]
-echo %gateway% >gateway
-goto main
-
-:main
-
-echo 已选择
-set /P proxy=<proxy
-
 set res_sig=0
-rem 选择变量 结束
+echo 现在的网关/Gateway used：%gateway%
+echo.
+echo 是否正确？（等待5秒）/ Correct?(Wait you for 5s)
+choice /T 5 /D Y
+if %errorlevel% == 2 goto gwlist
+if %errorlevel% == 1 goto starter
+:gwlist
+echo 网关列表/Gateway list：
+for /f "tokens=15" %%i in ('ipconfig ^| find /i "默认网关"') do echo %%i
+echo 选择网关并填入config.ini / Chose the gateway, fill it in the config.ini
+goto fermer
+rem 初始化 结束
 
 rem 启动 开始
+:starter
+color 70
 echo]
 echo ===========================================================================
-echo                                    启动中
+echo                               启动中/Starting
 echo ===========================================================================
 echo]
+
 
 echo "......0%%"
 start /min tun2socks.start.vbs
@@ -96,22 +97,22 @@ choice /t 1 /d y /n >nul
 
 echo]
 echo ===========================================================================
-echo                                     完成
+echo                                   完成/Done
 echo ===========================================================================
 echo]
 rem 启动 结束
 
 rem 选择 开始
 :cho
-choice /C FAR /M "请求操作：停止 F，等待 A，重启 R"
+color F0
+choice /C SR /M "请求操作/Control：停止/Stop S，重启/Restart R"
 rem 应先判断数值最高的错误码
-if errorlevel 3 goto setres
-if errorlevel 2 goto cho
+if errorlevel 2 goto set_res
 if errorlevel 1 goto shutthisdown
 rem 选择 结束
 
 rem 重启 开始
-:setres
+:set_res
 set res_sig=1
 goto shutthisdown
 rem 重启 结束
@@ -119,9 +120,11 @@ rem 重启 结束
 rem 停止 开始
 :shutthisdown
 
+color 70
+
 echo]
 echo ===========================================================================
-echo                                    操作中
+echo                                 操作中/Working
 echo ===========================================================================
 echo]
 
@@ -140,7 +143,7 @@ echo "......100%%"
 
 echo]
 echo ===========================================================================
-echo                                     完成
+echo                                   完成/Done
 echo ===========================================================================
 echo]
 
@@ -152,11 +155,14 @@ if %res_sig%==1 (
 rem 停止 结束
 
 :restart
-echo 重启中
+echo 重启中/Restarting
 start main.start.bat
+endlocal
 exit
 
 :fermer
-echo 任意键退出
+color 08
+echo 任意键退出/Press any to exit
 pause > nul
+endlocal
 exit

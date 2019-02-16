@@ -1,1 +1,2 @@
-Ce projet est très simple , faites ce que vous voulez.
+    Simple batch project, do whatever you want.
+In the "./core" folder missing [v2ray.exe and config.pb](https://github.com/v2ray/v2ray-core) and [tun2socks.exe](https://github.com/eycorsican/go-tun2socks) ,all program bases on these two.
