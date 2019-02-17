@@ -12,6 +12,7 @@
 
 ### 安装与使用
 1. 在 [这里](https://github.com/thanksshu/UTCNetGo-Win/releases) 下载需要的版本
+2. 下载Windows所需的[TAP-Windows](http://build.openvpn.net/downloads/releases/tap-windows-9.22.1-I602.exe)并安装。
 2. 解压缩后配置config.ini
 2. 点击“开始 start.bat”启动
 3. 允许获取管理员权限
