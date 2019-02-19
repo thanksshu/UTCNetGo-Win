@@ -14,6 +14,10 @@
 1. 在 [这里](https://github.com/thanksshu/UTCNetGo-Win/releases) 下载需要的版本
 2. 下载Windows所需的[TAP-Windows](http://build.openvpn.net/downloads/releases/tap-windows-9.22.1-I602.exe)并安装。
 2. 解压缩后配置config.ini
+    * 打开config.ini (用记事本就可以了)
+    * 更换 “=” 之后、“;” 之前的内容为目标值。
+        * “;” 后的内容为注释
+        * 配置网关时，可以运行脚本获取
 2. 点击“开始 start.bat”启动
 3. 允许获取管理员权限
 4. 选择是否使用设定网关，是则输入Y；如果此网关不是正在使用的网关，选择N；
