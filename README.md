@@ -13,7 +13,7 @@
 ### 安装与使用
 1. 在 [这里](https://github.com/thanksshu/UTCNetGo-Win/releases) 下载需要的版本
 2. 下载Windows所需的[TAP-Windows](http://build.openvpn.net/downloads/releases/tap-windows-9.21.2.exe)并安装。
-2. 解压缩后配置config.ini,主要是 **网关**
+2. 解压缩后配置config.ini，主要是 **网关**
     * 打开config.ini (用记事本就可以了)
     * 更换 “=” 之后、“;” 之前的内容为目标值。
         * “;” 后的内容为注释
